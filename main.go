@@ -17,7 +17,7 @@ func main() {
 	helpers.SetupPostgreSQL()
 
 	// run grpc
-	go cmd.ServeGRPC()
+	cmd.ServeGRPC()
 
 	// run http
 	// cmd.ServeHTTP()
