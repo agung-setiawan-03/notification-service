@@ -6,21 +6,23 @@ import (
 	"notification-service/internal/models"
 
 	"github.com/sirupsen/logrus"
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
-func SetupPostgreSQL() {
+func SetupMySQL() {
 	var err error
-	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", GetEnv("DB_HOST", "127.0.0.1"), GetEnv("DB_PORT", "5432"), GetEnv("DB_USER", ""), GetEnv("DB_PASSWORD", ""), GetEnv("DB_NAME", ""))
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", GetEnv("DB_USER", ""), GetEnv("DB_PASSWORD", ""), GetEnv("DB_HOST", "127.0.0.1"), GetEnv("DB_PORT", "3306"), GetEnv("DB_NAME", ""))
+
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
 	if err != nil {
-		log.Fatal("failed to connect to database: ", err)
+		log.Fatal("failed to connect database: ", err)
 	}
 
-	logrus.Info("Successfully connect to database..")
+	logrus.Info("Successfully connect to database.. ")
 
 	DB.AutoMigrate(&models.NotificationTemplate{}, &models.NotificationHistory{})
 }

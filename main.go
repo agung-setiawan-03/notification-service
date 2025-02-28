@@ -14,7 +14,7 @@ func main() {
 	helpers.SetupLogger()
 
 	// load db
-	helpers.SetupPostgreSQL()
+	helpers.SetupMySQL()
 
 	// run grpc
 	cmd.ServeGRPC()
